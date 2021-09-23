@@ -1,0 +1,1 @@
+insert into teachers(firstname,lastname,wage,email) values('testName', 'testName', 3000, 'testName@test.be')
