@@ -2,6 +2,8 @@ package be.dimitrigevers.hibernate.cyclingacademy.domain;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 
 @Entity
 @Table(name = "teachers")
@@ -58,8 +60,16 @@ public class Teacher {
         return gender;
     }
 
+
     // METHODS
 
+    public void raiseWage(BigDecimal percentage) {
+        if (percentage.compareTo(BigDecimal.ZERO) <= 0)
+            throw new IllegalArgumentException("Raise percentage should be positive");
+
+        wage = wage.add( wage.multiply( percentage )
+                .divide(BigDecimal.valueOf(100L), new MathContext(2, RoundingMode.HALF_UP)) );
+    }
 
 // OVERRIDDEN METHODS
 
