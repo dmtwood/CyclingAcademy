@@ -1,7 +1,5 @@
 package be.dimitrigevers.hibernate.cyclingacademy.domain;
 
-import org.springframework.transaction.annotation.Transactional;
-
 import javax.persistence.*;
 import java.math.BigDecimal;
 
