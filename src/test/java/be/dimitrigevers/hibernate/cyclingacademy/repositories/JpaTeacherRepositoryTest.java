@@ -1,6 +1,8 @@
 package be.dimitrigevers.hibernate.cyclingacademy.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import be.dimitrigevers.hibernate.cyclingacademy.domain.Gender;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -19,19 +21,33 @@ class JpaTeacherRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
         this.jpaTeacherRepository = jpaDocentRepository;
     }
 
-    private long idVanTestDocent() {
+    private long idMaleTeacher() {
         return super.jdbcTemplate.queryForObject(
-                "select id from teachers where firstname = 'testName'",
+                "select id from teachers where firstname = 'testNameM'",
+                Long.class
+        );
+    }
+
+    private long idFeMaleTeacher() {
+        return super.jdbcTemplate.queryForObject(
+                "select id from teachers where firstname = 'testNameF'",
+                Long.class
+        );
+    }
+
+    private long idOtherTeacher() {
+        return super.jdbcTemplate.queryForObject(
+                "select id from teachers where firstname = 'testNameX'",
                 Long.class
         );
     }
 
     @Test
     void findByIdExisting(){
-        long id = idVanTestDocent();
+        long id = idFeMaleTeacher();
         Assertions.assertThat(
                 jpaTeacherRepository.findById(id).get().getFirstname()
-        ).isEqualTo("testName");
+        ).isEqualTo("testNameF");
     }
 
     @Test
@@ -41,5 +57,25 @@ class JpaTeacherRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
         ).isNotPresent();
     }
 
+    @Test
+    void male(){
+        Assertions.assertThat(
+                jpaTeacherRepository.findById(idMaleTeacher()).get().getGender()
+        ).isEqualTo(Gender.MALE);
+    }
+
+    @Test
+    void female(){
+        Assertions.assertThat(
+                jpaTeacherRepository.findById(idFeMaleTeacher()).get().getGender()
+        ).isEqualTo(Gender.FEMALE);
+    }
+
+    @Test
+    void other(){
+        Assertions.assertThat(
+                jpaTeacherRepository.findById(idOtherTeacher()).get().getGender()
+        ).isEqualTo(Gender.OTHER);
+    }
 
 }

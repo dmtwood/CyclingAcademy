@@ -2,10 +2,7 @@ package be.dimitrigevers.hibernate.cyclingacademy.domain;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.math.BigDecimal;
 
 @Entity
@@ -21,6 +18,8 @@ public class Teacher {
     private String lastname;
     private BigDecimal wage;
     private String email;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 
     // PROTECTED CONSTRUCTOR
 
@@ -50,8 +49,11 @@ public class Teacher {
         return email;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
 
-// METHODS
+    // METHODS
 
 
 // OVERRIDDEN METHODS
