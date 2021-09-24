@@ -10,5 +10,7 @@ public interface TeacherRepository {
 
     public void create(Teacher teacher);
 
+    public void delete(long id);
+
 
 }

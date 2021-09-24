@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
+import javax.persistence.EntityManager;
 import java.math.BigDecimal;
 
 @DataJpaTest
@@ -22,14 +23,16 @@ class JpaTeacherRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
     private static final String TEACHERS = "teachers";
     private final JpaTeacherRepository jpaTeacherRepository;
     private Teacher teacher;
+    private final EntityManager entityManager;
 
     @BeforeEach
     void beforeEach(){
         teacher = new Teacher("testF", "testL", BigDecimal.TEN, "testL@test.be", Gender.FEMALE);
     }
 
-    public JpaTeacherRepositoryTest(JpaTeacherRepository jpaDocentRepository) {
+    public JpaTeacherRepositoryTest(JpaTeacherRepository jpaDocentRepository, EntityManager entityManager) {
         this.jpaTeacherRepository = jpaDocentRepository;
+        this.entityManager = entityManager;
     }
 
     private long idMaleTeacher() {
@@ -96,5 +99,16 @@ class JpaTeacherRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
         assertThat(
                 super.countRowsInTableWhere(TEACHERS, "id="+teacher.getId())
         ).isOne();
+    }
+
+    @Test
+    void delete(){
+        var id = idMaleTeacher();
+        jpaTeacherRepository.delete(id);
+        // force JPA to delete now
+        entityManager.flush();
+        assertThat(
+                super.countRowsInTableWhere(TEACHERS, "id="+id)
+        ).isZero();
     }
 }

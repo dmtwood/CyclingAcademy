@@ -26,12 +26,19 @@ public class JpaTeacherRepository implements TeacherRepository {
     @Override
     public Optional<Teacher> findById(long id) {
         return Optional.ofNullable(
-                entityManager.find( Teacher.class, id )
+                entityManager.find(Teacher.class, id)
         );
     }
 
     @Override
     public void create(Teacher teacher) {
         entityManager.persist(teacher);
+    }
+
+    @Override
+    public void delete(long id) {
+        findById(id).ifPresent(
+                teacher -> entityManager.remove(teacher)
+        );
     }
 }
