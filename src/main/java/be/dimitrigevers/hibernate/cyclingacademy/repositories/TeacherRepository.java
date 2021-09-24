@@ -7,4 +7,8 @@ import java.util.Optional;
 public interface TeacherRepository {
 
     public Optional<Teacher> findById(long id);
+
+    public void create(Teacher teacher);
+
+
 }

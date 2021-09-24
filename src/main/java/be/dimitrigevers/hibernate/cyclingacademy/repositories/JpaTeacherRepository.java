@@ -29,4 +29,9 @@ public class JpaTeacherRepository implements TeacherRepository {
                 entityManager.find( Teacher.class, id )
         );
     }
+
+    @Override
+    public void create(Teacher teacher) {
+        entityManager.persist(teacher);
+    }
 }

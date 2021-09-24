@@ -12,8 +12,7 @@ public class Teacher {
     // MEMBER VARS
 
 //    @Column(name = "id", nullable = false)
-    @Id private Long id;
-
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     private String firstname;
     private String lastname;
     private BigDecimal wage;
@@ -21,14 +20,22 @@ public class Teacher {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    // PROTECTED CONSTRUCTOR
+    // CONSTRUCTORS
 
     protected Teacher() {
     }
 
+    public Teacher(String firstname, String lastname, BigDecimal wage, String email, Gender gender) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.wage = wage;
+        this.email = email;
+        this.gender = gender;
+    }
 
-// GETTERS ( & SETTERS IF MUTABLE)
+    // GETTERS ( & SETTERS IF MUTABLE)
 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }

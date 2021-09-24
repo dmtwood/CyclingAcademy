@@ -3,19 +3,30 @@ package be.dimitrigevers.hibernate.cyclingacademy.repositories;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import be.dimitrigevers.hibernate.cyclingacademy.domain.Gender;
+import be.dimitrigevers.hibernate.cyclingacademy.domain.Teacher;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
+import java.math.BigDecimal;
+
 @DataJpaTest
 @Sql("/insertTestTeacher.sql")
 @Import(JpaTeacherRepository.class)
 class JpaTeacherRepositoryTest extends AbstractTransactionalJUnit4SpringContextTests {
 
+    private static final String TEACHERS = "teachers";
     private final JpaTeacherRepository jpaTeacherRepository;
+    private Teacher teacher;
+
+    @BeforeEach
+    void beforeEach(){
+        teacher = new Teacher("testF", "testL", BigDecimal.TEN, "testL@test.be", Gender.FEMALE);
+    }
 
     public JpaTeacherRepositoryTest(JpaTeacherRepository jpaDocentRepository) {
         this.jpaTeacherRepository = jpaDocentRepository;
@@ -78,4 +89,12 @@ class JpaTeacherRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
         ).isEqualTo(Gender.OTHER);
     }
 
+    @Test
+    void create(){
+        jpaTeacherRepository.create(teacher);
+        assertThat(teacher.getId()).isPositive();
+        assertThat(
+                super.countRowsInTableWhere(TEACHERS, "id="+teacher.getId())
+        ).isOne();
+    }
 }
