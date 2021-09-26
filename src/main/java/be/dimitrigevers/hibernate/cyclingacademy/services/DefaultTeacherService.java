@@ -1,5 +1,6 @@
 package be.dimitrigevers.hibernate.cyclingacademy.services;
 
+import be.dimitrigevers.hibernate.cyclingacademy.domain.Teacher;
 import be.dimitrigevers.hibernate.cyclingacademy.domain.TeacherService;
 import be.dimitrigevers.hibernate.cyclingacademy.exceptions.TeacherNotFoundException;
 import be.dimitrigevers.hibernate.cyclingacademy.repositories.TeacherRepository;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @Transactional
@@ -38,4 +40,7 @@ public class DefaultTeacherService implements TeacherService {
                 .orElseThrow( TeacherNotFoundException::new )
                 .raiseWage(percentageToRaiseWage);
     }
+
+
+
 }

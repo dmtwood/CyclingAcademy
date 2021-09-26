@@ -5,13 +5,16 @@ import java.math.BigDecimal;
 import java.math.MathContext;
 import java.math.RoundingMode;
 
+
+// best practice => place named queries in a separate xml file in the resources/META-INF/ directory
+//@NamedQuery(name = "Teacher.findByWageBetween", query = "select t from Teacher t where t.wage between :min and :max order by t.wage, t.id")
 @Entity
 @Table(name = "teachers")
 public class Teacher {
 
     // MEMBER VARS
 
-//    @Column(name = "id", nullable = false)
+    //    @Column(name = "id", nullable = false)
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
     private String firstname;
     private String lastname;
@@ -74,3 +77,5 @@ public class Teacher {
 // OVERRIDDEN METHODS
 
 }
+
+
