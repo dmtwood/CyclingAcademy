@@ -27,4 +27,6 @@ public interface TeacherRepository {
     public BigDecimal findHighestWage();
 
     List<CountByWage> findTeacherCountByWage();
+
+    int generalRaise(BigDecimal raisePercentage);
 }

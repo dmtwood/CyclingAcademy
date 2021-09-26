@@ -106,6 +106,15 @@ public class JpaTeacherRepository implements TeacherRepository {
                 CountByWage.class
         ).getResultList();
     }
+
+    @Override
+    public int generalRaise(BigDecimal raisePercentage) {
+        var raiseFactor = BigDecimal.ONE.add(raisePercentage.divide(BigDecimal.valueOf(100)));
+        return entityManager
+                .createNamedQuery( "Teacher.generalRaise" )
+                .setParameter("raisePercentage", raiseFactor)
+                .executeUpdate();
+    }
 }
 
 

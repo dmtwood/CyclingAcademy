@@ -124,7 +124,7 @@ class JpaTeacherRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
     }
 
     @Test
-    void findByWageBetween(){
+    void findByWageBetween() {
         var MIN_WAGE = BigDecimal.valueOf(2000);
         var MAX_WAGE = BigDecimal.valueOf(8000);
         assertThat(
@@ -135,25 +135,25 @@ class JpaTeacherRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
                         "wage between 2000 and 8000"
                 )
         ).allSatisfy(
-          teacher -> assertThat( teacher.getWage() ).isBetween(MIN_WAGE, MAX_WAGE)
+                teacher -> assertThat(teacher.getWage()).isBetween(MIN_WAGE, MAX_WAGE)
         );
     }
 
     @Test
-    public void findAllEmailAddresses(){
+    public void findAllEmailAddresses() {
         assertThat(
-         jpaTeacherRepository.findAllEmailAddresses()
+                jpaTeacherRepository.findAllEmailAddresses()
         ).hasSize(
                 super.jdbcTemplate.queryForObject(
                         "select count(email) from teachers",
                         Integer.class)
         ).allSatisfy(
-                emailAddress -> assertThat( emailAddress ).contains("@")
+                emailAddress -> assertThat(emailAddress).contains("@")
         );
     }
 
     @Test
-    public void findAllIdsAndEmails(){
+    public void findAllIdsAndEmails() {
         assertThat(
                 jpaTeacherRepository.findAllIdsAndEmails()
         ).hasSize(
@@ -162,35 +162,52 @@ class JpaTeacherRepositoryTest extends AbstractTransactionalJUnit4SpringContextT
     }
 
     @Test
-    public void findHighestWage(){
+    public void findHighestWage() {
         assertThat(
                 jpaTeacherRepository.findHighestWage()
         ).isEqualByComparingTo(
                 super.jdbcTemplate.queryForObject(
                         "select max(wage) from teachers",
                         BigDecimal.class)
-                );
+        );
     }
 
     @Test
-    public void findTeacherCountByWage(){
+    public void findTeacherCountByWage() {
         BigDecimal givenWage = BigDecimal.valueOf(3500);
         assertThat(
                 jpaTeacherRepository.findTeacherCountByWage()
         ).hasSize(
                 super.jdbcTemplate.queryForObject(
-                "select count(distinct wage) from teachers",
-                Integer.class
+                        "select count(distinct wage) from teachers",
+                        Integer.class
                 )
         ).filteredOn(
                 countByWage -> countByWage.getGivenWage().compareTo(givenWage) == 0
         ).allSatisfy(
-            countByWage -> assertThat(
-                    countByWage.getTeacherCount()
-            ).isEqualTo(
-                    super.countRowsInTableWhere(TEACHERS, "wage=3500")
-            )
+                countByWage -> assertThat(
+                        countByWage.getTeacherCount()
+                ).isEqualTo(
+                        super.countRowsInTableWhere(TEACHERS, "wage=3500")
+                )
         );
+    }
+
+    @Test
+    public void raiseWages() {
+        assertThat(
+                jpaTeacherRepository.generalRaise(BigDecimal.TEN)
+        ).isEqualByComparingTo(
+                super.countRowsInTable(TEACHERS)
+        );
+
+        assertThat(
+                super.jdbcTemplate.queryForObject(
+                        "select wage from teachers where id=?",
+                        BigDecimal.class,
+                        idMaleTeacher()
+                )
+        ).isEqualByComparingTo("3300");
     }
 }
 
